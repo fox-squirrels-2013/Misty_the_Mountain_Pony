@@ -45,7 +45,7 @@ html, body, #map {
 var map = new google.maps.Map(d3.select("#map").node(), {
   zoom: 3,
   center: new google.maps.LatLng(30.76487, -82.41948),
-  mapTypeId: google.maps.MapTypeId.ROADMAP
+  mapTypeId: google.maps.MapTypeId.TERRAIN
 
 });
 
@@ -82,12 +82,12 @@ var map = new google.maps.Map(d3.select("#map").node(), {
 
 var J = (function(){
   // internal functions to grab data from the json structure
-  var _link = function(j) { return j.value[0].link; }
-  var _lat = function(j) { return j.value[1].location[0]; }
-  var _long = function(j) { return j.value[1].location[1]; }
-  var _likes = function(j) { return j.value[2].likes; }
-  var _created = function(j) { return j.value[3].created; }
-  var _thumbnail = function(j) { return j.value[4].thumbnail;}
+  var _link = function(j) { return j.value.instagram_image.link; }
+  var _lat = function(j) { return j.value.instagram_image.latitude; }
+  var _long = function(j) { return j.value.instagram_image.longitude; }
+  var _likes = function(j) { return j.value.instagram_image.likes; }
+  var _created = function(j) { return j.value.instagram_image.created; }
+  var _thumbnail = function(j) { return j.value.instagram_image.thumbnail;}
 
   // public interface
   var f = {};
@@ -104,9 +104,8 @@ var J = (function(){
 // end of helper function to massage json data for d3
 ////////////////////////////////////////////////////////
 
-d3.json("instagram.json", function(data) {
+d3.json("http://localhost:9393/instagram2.json", function(data) {
 
-  // debugger
   var overlay = new google.maps.OverlayView();
 
   // Add the container when the overlay is added to the map.
@@ -130,9 +129,19 @@ d3.json("instagram.json", function(data) {
           .attr("class", "marker");
 
       // Add a circle.
+      // [3, 10]
       marker.append("svg:circle")
-          .attr("r", 5)
-          .attr('fill', 'red')
+          .attr("r", function(d) { 
+           // debugger
+            return 10;
+
+          })
+          .attr('fill', function(d){
+             var color = d3.scale.linear()
+              .domain([0, 200])
+              .range(["white", "red"]);
+              return color(J.likes(d));
+          })
           .attr("cx", padding)
           .attr("cy", padding);
 
@@ -154,6 +163,7 @@ d3.json("instagram.json", function(data) {
           .style("top", "100px");
 
       function transformMarker(d) {
+        // debugger
         d = new google.maps.LatLng(J.lat(d), J.long(d));
         d = projection.fromLatLngToDivPixel(d);
         return d3.select(this)
@@ -170,7 +180,7 @@ d3.json("instagram.json", function(data) {
       }
 
       // show labels if zoom is greater than 10 (ie. street level)
-
+      // console.log(map.zoom);
       if (map.zoom >= 10) {
           layer.selectAll("svg")
             .style('width', map.zoom * 15)
@@ -189,6 +199,7 @@ d3.json("instagram.json", function(data) {
             .attr('height', map.zoom * 15);
 
       } else {
+
           layer.selectAll("svg")
             .style('width', "20px")
             .style('height', "20px");
