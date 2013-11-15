@@ -6,11 +6,6 @@ enable :sessions
 
 CALLBACK_URL = "http://localhost:9393/oauth/callback"
 
-Instagram.configure do |config|
-  config.client_id = "c992d684703e4aa198c64adab13039d0"
-  config.client_secret = "295b353a3e0a491ea3e6b4478c8eca15"
-end
-
 get "/" do
   '<a href="/oauth/connect">Connect with Instagram</a>'
 end
@@ -45,8 +40,8 @@ get "/feed/:tag" do
     args[:link]         = g[:link]
     args[:created]      = g[:created_time]
     args[:thumbnail]    = g[:images][:thumbnail][:url]
-    args[:tags]         = g[:tags]#.map {|t| Tag.create(t)}
-    InstagramImage.create(args)
+    args[:tags]         = g[:tags]
+    InstagramImage.new(args)
   end
 
   ap grs
@@ -100,5 +95,3 @@ class InstagramImage
     json
   end
 end
-
-
