@@ -126,6 +126,11 @@ namespace :db do
       system "rake db:migrate RACK_ENV=test"
     end
   end
+
+  desc "dump the db"
+  task :dump do
+    `pg_dump #{DB_NAME} > data_dump`
+  end
 end
 
 desc 'Start IRB with application environment loaded'

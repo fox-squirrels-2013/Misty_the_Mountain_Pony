@@ -2,8 +2,8 @@ class CreateInitialTables < ActiveRecord::Migration
   def change
     create_table :instagram_images do |t|
       t.string :link
-      t.integer :latitude
-      t.integer :longitude
+      t.string :latitude
+      t.string :longitude
       t.integer :likes
       t.string :created
       t.string :thumbnail

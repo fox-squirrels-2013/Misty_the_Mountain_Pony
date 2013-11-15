@@ -26,3 +26,4 @@ bin/
 .env
 *.swp
 config/instagram.yaml
+config/instagram_job.rb
