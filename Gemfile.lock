@@ -13,6 +13,7 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     arel (3.0.2)
+    awesome_print (1.1.0)
     backports (3.3.3)
     builder (3.0.4)
     daemons (1.1.9)
@@ -22,8 +23,19 @@ GEM
       activesupport (>= 3.0.0)
     faker (1.1.2)
       i18n (~> 0.5)
+    faraday (0.8.8)
+      multipart-post (~> 1.2.0)
+    faraday_middleware (0.9.0)
+      faraday (>= 0.7.4, < 0.9)
+    hashie (2.0.5)
     i18n (0.6.1)
+    instagram (0.10.0)
+      faraday (>= 0.7, < 0.9)
+      faraday_middleware (~> 0.8)
+      hashie (>= 0.4.0)
+      multi_json (~> 1.0, >= 1.0.3)
     multi_json (1.6.1)
+    multipart-post (1.2.0)
     pg (0.14.1)
     rack (1.5.2)
     rack-protection (1.5.0)
@@ -67,8 +79,10 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   activesupport
+  awesome_print
   factory_girl
   faker
+  instagram
   pg
   rack-test
   rake

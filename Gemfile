@@ -12,10 +12,12 @@ gem 'thin'
 
 gem 'activesupport'
 gem 'activerecord'
-
+gem 'awesome_print'
 gem 'rake'
 
 gem 'shotgun'
+
+gem 'instagram'
 
 group :test do
   gem 'shoulda-matchers'
