@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
     <style type="text/css">
 
 html, body, #map {
@@ -13,26 +13,31 @@ html, body, #map {
   padding: 0;
 }
 
-.stations, .stations svg {
+.graffiti, .graffiti svg {
   position: absolute;
 }
 
-.stations svg {
-  width: 60px;
+.graffiti svg {
+  /*border: 1px solid black;*/
+  width: 20px;
   height: 20px;
-  padding-right: 100px;
   font: 10px sans-serif;
+
+  /* images were disappearing at certain zoom level */
+  /* fixed: http://stackoverflow.com/a/12215835 */
+  transform: translateZ(0px);
+  -webkit-transform: translateZ(0px);
+  -moz-transform: translateZ(0px);
 }
 
-.stations circle {
-  /*fill: red;*/
-  /*stroke: orange;*/
+.graffiti circle {
   stroke-width: 1.5px;
 }
 
     </style>
   </head>
   <body>
+    <div id="controls"></div>
     <div id="map"></div>
     <script type="text/javascript">
 
@@ -40,8 +45,20 @@ html, body, #map {
 var map = new google.maps.Map(d3.select("#map").node(), {
   zoom: 3,
   center: new google.maps.LatLng(30.76487, -82.41948),
-  mapTypeId: google.maps.MapTypeId.TERRAIN
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+
 });
+
+// this click listener works but we can't correlate to the image and url
+// google.maps.event.addListener(map, 'click', function(e) {
+//   console.log(e);
+// });
+
+
+// MapTypeId.ROADMAP displays the default road map view
+// MapTypeId.SATELLITE displays Google Earth satellite images
+// MapTypeId.HYBRID displays a mixture of normal and satellite views
+// MapTypeId.TERRAIN displays a physical map based on terrain information.
 
 // Load the station data. When the data comes back, create an overlay.
 
@@ -87,31 +104,17 @@ var J = (function(){
 // end of helper function to massage json data for d3
 ////////////////////////////////////////////////////////
 
-
 d3.json("instagram.json", function(data) {
-
-  // var clean_data = (function() {
-  //   var cln = [];
-  //   var dat = {};
-  //   Object.keys(data).forEach(function(k){
-  //     dat.id = k;
-  //     dat.ig = data[k];
-  //     cln.push(dat);
-  //   });
-  //   return cln
-  // }());
-
-  // console.log(clean_data);
-  // data = clean_data;
-
 
   // debugger
   var overlay = new google.maps.OverlayView();
 
   // Add the container when the overlay is added to the map.
   overlay.onAdd = function() {
-    var layer = d3.select(this.getPanes().overlayLayer).append("div")
-        .attr("class", "stations");
+    // clicking on images was a real pain.  chaning to overlayMouseTarget did it
+    // https://groups.google.com/forum/#!topic/d3-js/eYnbIcfwhvw
+    var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
+        .attr("class", "graffiti");
 
     // Draw each marker as a separate SVG element.
     // We could use a single SVG, but what size would it have?
@@ -121,15 +124,15 @@ d3.json("instagram.json", function(data) {
 
       var marker = layer.selectAll("svg")
           .data(d3.entries(data))
-          .each(transform) // update existing markers
+          .each(transformMarker) // update existing markers
         .enter().append("svg:svg")
-          .each(transform)
+          .each(transformMarker)
           .attr("class", "marker");
 
       // Add a circle.
       marker.append("svg:circle")
-          .attr("r", 4.5)
-          .attr('fill', 'orange')
+          .attr("r", 5)
+          .attr('fill', 'red')
           .attr("cx", padding)
           .attr("cy", padding);
 
@@ -138,17 +141,70 @@ d3.json("instagram.json", function(data) {
           .attr("x", padding + 7)
           .attr("y", padding)
           .attr("dy", ".34em")
-          .text(function(d) { return d.key; });
+          .text(function(d) { return d.key; })
+          .style("opacity", 0);
 
-      function transform(d) {
+      marker.append("svg:image")
+          .each(transformImage)
+          .attr("xlink:href", function(d) {return J.thumbnail(d);})
+          .attr("width", 0)
+          .attr("height", 0)
+          .style("opacity", 1)
+          .style("left", "100px")
+          .style("top", "100px");
+
+      function transformMarker(d) {
         d = new google.maps.LatLng(J.lat(d), J.long(d));
         d = projection.fromLatLngToDivPixel(d);
         return d3.select(this)
             .style("left", (d.x - padding) + "px")
             .style("top", (d.y - padding) + "px");
       }
+
+      function transformImage(d) {
+        d = new google.maps.LatLng(J.lat(d), J.long(d));
+        d = projection.fromLatLngToDivPixel(d);
+        return d3.select(this)
+            .attr("x", 15)
+            .attr("y", 15);
+      }
+
+      // show labels if zoom is greater than 10 (ie. street level)
+
+      if (map.zoom >= 10) {
+          layer.selectAll("svg")
+            .style('width', map.zoom * 15)
+            .style('height', map.zoom * 15)
+
+          layer.selectAll("svg").selectAll("text")
+            .style('padding-right', '100px')
+            .style("opacity", 1);
+
+          layer.selectAll("svg").selectAll("image")
+            .style("opacity", 1)
+            .transition()
+            .duration(500)
+            .ease('bounce', 0.1)
+            .attr('width', map.zoom * 15)
+            .attr('height', map.zoom * 15);
+
+      } else {
+          layer.selectAll("svg")
+            .style('width', "20px")
+            .style('height', "20px");
+
+          layer.selectAll("svg").selectAll("text")
+            .style("opacity", 0);
+
+          layer.selectAll("svg").selectAll("image")
+            .style("opacity", 0);
+      }
+
+      layer.selectAll("svg").selectAll("image")
+        .on("click", function(d,i) { window.open(J.link(d));});
     };
   };
+
 
   // Bind our overlay to the map…
   overlay.setMap(map);
