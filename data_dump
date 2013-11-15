@@ -1,0 +1,514 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: instagram_images; Type: TABLE; Schema: public; Owner: apprentice; Tablespace: 
+--
+
+CREATE TABLE instagram_images (
+    id integer NOT NULL,
+    link character varying(255),
+    latitude integer,
+    longitude integer,
+    likes integer,
+    created character varying(255),
+    thumbnail character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.instagram_images OWNER TO apprentice;
+
+--
+-- Name: instagram_images_id_seq; Type: SEQUENCE; Schema: public; Owner: apprentice
+--
+
+CREATE SEQUENCE instagram_images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.instagram_images_id_seq OWNER TO apprentice;
+
+--
+-- Name: instagram_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apprentice
+--
+
+ALTER SEQUENCE instagram_images_id_seq OWNED BY instagram_images.id;
+
+
+--
+-- Name: instagram_images_tags; Type: TABLE; Schema: public; Owner: apprentice; Tablespace: 
+--
+
+CREATE TABLE instagram_images_tags (
+    id integer NOT NULL,
+    instagram_image_id integer,
+    tag_id integer
+);
+
+
+ALTER TABLE public.instagram_images_tags OWNER TO apprentice;
+
+--
+-- Name: instagram_images_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: apprentice
+--
+
+CREATE SEQUENCE instagram_images_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.instagram_images_tags_id_seq OWNER TO apprentice;
+
+--
+-- Name: instagram_images_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apprentice
+--
+
+ALTER SEQUENCE instagram_images_tags_id_seq OWNED BY instagram_images_tags.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: apprentice; Tablespace: 
+--
+
+CREATE TABLE schema_migrations (
+    version character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.schema_migrations OWNER TO apprentice;
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: apprentice; Tablespace: 
+--
+
+CREATE TABLE tags (
+    id integer NOT NULL,
+    label character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.tags OWNER TO apprentice;
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: apprentice
+--
+
+CREATE SEQUENCE tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tags_id_seq OWNER TO apprentice;
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: apprentice
+--
+
+ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apprentice
+--
+
+ALTER TABLE ONLY instagram_images ALTER COLUMN id SET DEFAULT nextval('instagram_images_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apprentice
+--
+
+ALTER TABLE ONLY instagram_images_tags ALTER COLUMN id SET DEFAULT nextval('instagram_images_tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: apprentice
+--
+
+ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
+
+
+--
+-- Data for Name: instagram_images; Type: TABLE DATA; Schema: public; Owner: apprentice
+--
+
+COPY instagram_images (id, link, latitude, longitude, likes, created, thumbnail, created_at, updated_at) FROM stdin;
+1	http://instagram.com/p/guLbiln_Zb/	13	100	80	1384488995	http://distilleryimage11.s3.amazonaws.com/b6fccf664dac11e3b2e91251caec0405_5.jpg	2013-11-14 21:54:32.748785	2013-11-14 21:54:32.748785
+2	http://instagram.com/p/guVrKescpH/	19	99	3	1384494365	http://distilleryimage11.s3.amazonaws.com/384699744db911e3ab4312a88b523f66_5.jpg	2013-11-14 21:54:32.754544	2013-11-14 21:54:32.754544
+3	http://instagram.com/p/gs_qydyuaK/	33	-117	108	1384449274	http://distilleryimage2.s3.amazonaws.com/3b7180a04d5011e3aa4d12bed4c9a5f4_5.jpg	2013-11-14 21:54:32.758341	2013-11-14 21:54:32.758341
+4	http://instagram.com/p/guWSmbQxMz/	41	28	1	1384494689	http://distilleryimage11.s3.amazonaws.com/f8d610844db911e3836e121e66d6e8e0_5.jpg	2013-11-14 21:54:49.609141	2013-11-14 21:54:49.609141
+5	http://instagram.com/p/guW7BlHNzO/	40	-73	0	1384495020	http://distilleryimage6.s3.amazonaws.com/be37c8684dba11e3b727125272bbf0ca_5.jpg	2013-11-14 21:57:49.020061	2013-11-14 21:57:49.020061
+6	http://instagram.com/p/guWy4NscqE/	19	99	1	1384494953	http://distilleryimage4.s3.amazonaws.com/967200464dba11e3a99c12ff1b20f24a_5.jpg	2013-11-14 21:57:49.025278	2013-11-14 21:57:49.025278
+7	http://instagram.com/p/guWyYVknHT/	10	123	0	1384494949	http://distilleryimage11.s3.amazonaws.com/940470464dba11e3841c123ff65d194d_5.jpg	2013-11-14 21:57:49.028497	2013-11-14 21:57:49.028497
+8	http://instagram.com/p/gtv0llpDX8/	34	-118	122	1384474520	http://distilleryimage8.s3.amazonaws.com/0349b9c84d8b11e38de20aac627fb7b3_5.jpg	2013-11-14 21:57:49.034461	2013-11-14 21:57:49.034461
+9	http://instagram.com/p/guWw6wE4os/	34	-118	1	1384494937	http://distilleryimage8.s3.amazonaws.com/8ce020b24dba11e3b936125b94ea3ab5_5.jpg	2013-11-14 21:57:49.037918	2013-11-14 21:57:49.037918
+10	http://instagram.com/p/goew0Xj1Jt/	40	28	130	1384297804	http://distilleryimage1.s3.amazonaws.com/9063265c4bef11e39e1112abd3bdb6b6_5.jpg	2013-11-14 21:57:49.040907	2013-11-14 21:57:49.040907
+11	http://instagram.com/p/gtTRWGpt1s/	53	12	89	1384459551	http://distilleryimage0.s3.amazonaws.com/2934f1704d6811e399f51277b05c482c_5.jpg	2013-11-14 21:57:49.043802	2013-11-14 21:57:49.043802
+12	http://instagram.com/p/guVbm8g0a5/	45	-73	11	1384494238	http://distilleryimage1.s3.amazonaws.com/ec524d884db811e385b00edb007c6042_5.jpg	2013-11-14 21:58:19.543999	2013-11-14 21:58:19.543999
+13	http://instagram.com/p/ar1NKMDBt4/	-37	144	13	1371525332	http://distilleryimage4.s3.amazonaws.com/55c43872d7c511e2ba1322000ae91369_5.jpg	2013-11-14 21:58:19.55026	2013-11-14 21:58:19.55026
+14	http://instagram.com/p/cAKZnFJv2Q/	43	-79	19	1374355016	http://distilleryimage8.s3.amazonaws.com/b511f640f18111e29f3f22000a1f978e_5.jpg	2013-11-14 21:58:19.553616	2013-11-14 21:58:19.553616
+15	http://instagram.com/p/guRFzsqi_z/	36	-115	10	1384491962	http://distilleryimage7.s3.amazonaws.com/9fe08b184db311e397c90a103f38cff6_5.jpg	2013-11-14 21:58:19.558949	2013-11-14 21:58:19.558949
+16	http://instagram.com/p/guYFVgvruz/	40	-73	8	1384495628	http://distilleryimage11.s3.amazonaws.com/29121e304dbc11e38c64123305b440b3_5.jpg	2013-11-14 22:25:50.291999	2013-11-14 22:25:50.291999
+17	http://instagram.com/p/guXFYqiyRn/	-37	144	10	1384495105	http://distilleryimage3.s3.amazonaws.com/f0d02f544dba11e3a0b012bc9aac6927_5.jpg	2013-11-14 22:25:50.309415	2013-11-14 22:25:50.309415
+18	http://instagram.com/p/gua8j2M9D9/	38	23	14	1384497129	http://distilleryimage9.s3.amazonaws.com/a7b84a0e4dbf11e3b8351283df6e2051_5.jpg	2013-11-14 22:44:19.448338	2013-11-14 22:44:19.448338
+19	http://instagram.com/p/gudZ1nj2ys/	43	1	13	1384498418	http://distilleryimage8.s3.amazonaws.com/a7ad62e44dc211e38f680e9793ce04e7_5.jpg	2013-11-14 23:08:23.559073	2013-11-14 23:08:23.559073
+20	http://instagram.com/p/gudBSSBGeC/	25	-80	7	1384498217	http://distilleryimage6.s3.amazonaws.com/2fcbb35c4dc211e3bef712031e35447b_5.jpg	2013-11-14 23:08:23.737044	2013-11-14 23:08:23.737044
+\.
+
+
+--
+-- Name: instagram_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: apprentice
+--
+
+SELECT pg_catalog.setval('instagram_images_id_seq', 20, true);
+
+
+--
+-- Data for Name: instagram_images_tags; Type: TABLE DATA; Schema: public; Owner: apprentice
+--
+
+COPY instagram_images_tags (id, instagram_image_id, tag_id) FROM stdin;
+1	18	31
+2	18	32
+3	18	33
+4	18	34
+5	18	35
+6	18	36
+7	18	37
+8	18	38
+9	18	39
+10	18	40
+11	18	41
+12	18	42
+13	18	43
+14	18	44
+15	18	45
+16	18	46
+17	18	47
+18	18	48
+19	18	49
+20	18	50
+21	18	51
+22	18	52
+23	18	53
+24	18	54
+25	18	55
+26	18	56
+27	18	57
+28	18	58
+29	18	59
+30	18	60
+32	1	104
+33	19	105
+34	19	106
+35	19	62
+36	19	107
+37	19	108
+38	19	109
+39	19	110
+40	19	111
+41	19	112
+42	19	113
+43	19	114
+44	19	115
+45	19	71
+46	19	116
+47	19	117
+48	19	14
+49	19	118
+50	19	119
+51	19	120
+52	19	121
+53	19	122
+54	19	123
+55	19	2
+56	19	69
+57	19	124
+58	19	125
+59	19	126
+60	19	127
+61	20	128
+62	20	129
+63	20	130
+64	20	131
+65	20	132
+66	20	133
+67	20	134
+68	20	135
+69	20	136
+70	20	88
+71	20	137
+72	20	138
+73	20	81
+74	20	139
+75	20	140
+76	20	141
+77	20	142
+78	20	143
+79	20	2
+80	20	144
+81	20	83
+\.
+
+
+--
+-- Name: instagram_images_tags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: apprentice
+--
+
+SELECT pg_catalog.setval('instagram_images_tags_id_seq', 81, true);
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: apprentice
+--
+
+COPY schema_migrations (version) FROM stdin;
+20131114174257
+\.
+
+
+--
+-- Data for Name: tags; Type: TABLE DATA; Schema: public; Owner: apprentice
+--
+
+COPY tags (id, label, created_at, updated_at) FROM stdin;
+1	special_shots	2013-11-14 22:42:33.703961	2013-11-14 22:42:33.703961
+2	rsa_graffiti	2013-11-14 22:42:33.743361	2013-11-14 22:42:33.743361
+3	photowall	2013-11-14 22:42:33.746338	2013-11-14 22:42:33.746338
+4	rainbow_wall_splash	2013-11-14 22:42:33.748231	2013-11-14 22:42:33.748231
+5	shotaward	2013-11-14 22:42:33.750309	2013-11-14 22:42:33.750309
+6	team_greece	2013-11-14 22:42:33.75273	2013-11-14 22:42:33.75273
+7	instafoto_ve	2013-11-14 22:42:33.754984	2013-11-14 22:42:33.754984
+8	bnw_globe_cs1	2013-11-14 22:42:33.757556	2013-11-14 22:42:33.757556
+9	ic_wow	2013-11-14 22:42:33.759468	2013-11-14 22:42:33.759468
+10	rainbow_wall	2013-11-14 22:42:33.761126	2013-11-14 22:42:33.761126
+11	rsa_bnw_splash	2013-11-14 22:42:33.762746	2013-11-14 22:42:33.762746
+12	insta_worldspotz	2013-11-14 22:42:33.764369	2013-11-14 22:42:33.764369
+13	rsa_bnw	2013-11-14 22:42:33.766088	2013-11-14 22:42:33.766088
+14	rsa_dark	2013-11-14 22:42:33.767983	2013-11-14 22:42:33.767983
+15	colorsplash_bu	2013-11-14 22:42:33.769858	2013-11-14 22:42:33.769858
+16	insta_greece	2013-11-14 22:42:33.771717	2013-11-14 22:42:33.771717
+17	ig_4every1	2013-11-14 22:42:33.773538	2013-11-14 22:42:33.773538
+18	worldunion	2013-11-14 22:42:33.775435	2013-11-14 22:42:33.775435
+19	bw_greece_splash	2013-11-14 22:42:33.777385	2013-11-14 22:42:33.777385
+20	all_shots	2013-11-14 22:42:33.779399	2013-11-14 22:42:33.779399
+21	bnw_globe	2013-11-14 22:42:33.781515	2013-11-14 22:42:33.781515
+22	rsa_theyards	2013-11-14 22:42:33.783459	2013-11-14 22:42:33.783459
+23	gf_greece	2013-11-14 22:42:33.785587	2013-11-14 22:42:33.785587
+24	phototag_it	2013-11-14 22:42:33.787383	2013-11-14 22:42:33.787383
+25	bw_greece	2013-11-14 22:42:33.789091	2013-11-14 22:42:33.789091
+26	ig_athens	2013-11-14 22:42:33.791224	2013-11-14 22:42:33.791224
+27	global_stars	2013-11-14 22:42:33.793886	2013-11-14 22:42:33.793886
+28	ig_greece	2013-11-14 22:42:33.795933	2013-11-14 22:42:33.795933
+29	hdr_greece	2013-11-14 22:42:33.797583	2013-11-14 22:42:33.797583
+30	gf_daily	2013-11-14 22:42:33.799166	2013-11-14 22:42:33.799166
+31	special_shots	2013-11-14 22:44:19.276334	2013-11-14 22:44:19.276334
+32	rsa_graffiti	2013-11-14 22:44:19.284559	2013-11-14 22:44:19.284559
+33	photowall	2013-11-14 22:44:19.286841	2013-11-14 22:44:19.286841
+34	rainbow_wall_splash	2013-11-14 22:44:19.28893	2013-11-14 22:44:19.28893
+35	shotaward	2013-11-14 22:44:19.291074	2013-11-14 22:44:19.291074
+36	team_greece	2013-11-14 22:44:19.294067	2013-11-14 22:44:19.294067
+37	instafoto_ve	2013-11-14 22:44:19.296257	2013-11-14 22:44:19.296257
+38	bnw_globe_cs1	2013-11-14 22:44:19.298307	2013-11-14 22:44:19.298307
+39	ic_wow	2013-11-14 22:44:19.300504	2013-11-14 22:44:19.300504
+40	rainbow_wall	2013-11-14 22:44:19.30234	2013-11-14 22:44:19.30234
+41	rsa_bnw_splash	2013-11-14 22:44:19.304517	2013-11-14 22:44:19.304517
+42	insta_worldspotz	2013-11-14 22:44:19.306486	2013-11-14 22:44:19.306486
+43	rsa_bnw	2013-11-14 22:44:19.30851	2013-11-14 22:44:19.30851
+44	rsa_dark	2013-11-14 22:44:19.310185	2013-11-14 22:44:19.310185
+45	colorsplash_bu	2013-11-14 22:44:19.312299	2013-11-14 22:44:19.312299
+46	insta_greece	2013-11-14 22:44:19.314568	2013-11-14 22:44:19.314568
+47	ig_4every1	2013-11-14 22:44:19.31628	2013-11-14 22:44:19.31628
+48	worldunion	2013-11-14 22:44:19.317859	2013-11-14 22:44:19.317859
+49	bw_greece_splash	2013-11-14 22:44:19.319708	2013-11-14 22:44:19.319708
+50	all_shots	2013-11-14 22:44:19.321848	2013-11-14 22:44:19.321848
+51	bnw_globe	2013-11-14 22:44:19.324182	2013-11-14 22:44:19.324182
+52	rsa_theyards	2013-11-14 22:44:19.326442	2013-11-14 22:44:19.326442
+53	gf_greece	2013-11-14 22:44:19.32823	2013-11-14 22:44:19.32823
+54	phototag_it	2013-11-14 22:44:19.329974	2013-11-14 22:44:19.329974
+55	bw_greece	2013-11-14 22:44:19.332016	2013-11-14 22:44:19.332016
+56	ig_athens	2013-11-14 22:44:19.333692	2013-11-14 22:44:19.333692
+57	global_stars	2013-11-14 22:44:19.335322	2013-11-14 22:44:19.335322
+58	ig_greece	2013-11-14 22:44:19.337134	2013-11-14 22:44:19.337134
+59	hdr_greece	2013-11-14 22:44:19.338864	2013-11-14 22:44:19.338864
+60	gf_daily	2013-11-14 22:44:19.340798	2013-11-14 22:44:19.340798
+61	love	2013-11-14 22:44:19.512539	2013-11-14 22:44:19.512539
+62	streetart	2013-11-14 22:44:19.514704	2013-11-14 22:44:19.514704
+63	newyork	2013-11-14 22:44:19.51638	2013-11-14 22:44:19.51638
+64	the_visionaries	2013-11-14 22:44:19.517949	2013-11-14 22:44:19.517949
+65	precious_graffiti	2013-11-14 22:44:19.520017	2013-11-14 22:44:19.520017
+66	newyorkfind	2013-11-14 22:44:19.522591	2013-11-14 22:44:19.522591
+67	precious_paint	2013-11-14 22:44:19.524616	2013-11-14 22:44:19.524616
+68	rsa_graffiti	2013-11-14 22:44:19.526326	2013-11-14 22:44:19.526326
+69	rsa_preciousjunk	2013-11-14 22:44:19.528189	2013-11-14 22:44:19.528189
+70	photo_features	2013-11-14 22:44:19.529815	2013-11-14 22:44:19.529815
+71	infamous_family	2013-11-14 22:44:19.531578	2013-11-14 22:44:19.531578
+72	rsa_ladies	2013-11-14 22:44:19.533661	2013-11-14 22:44:19.533661
+73	rsa_urban	2013-11-14 22:44:19.535585	2013-11-14 22:44:19.535585
+74	urbex_lady	2013-11-14 22:44:19.537268	2013-11-14 22:44:19.537268
+75	the_visionaries	2013-11-14 22:44:19.573836	2013-11-14 22:44:19.573836
+76	mobilephotography	2013-11-14 22:44:19.57601	2013-11-14 22:44:19.57601
+77	led	2013-11-14 22:44:19.577761	2013-11-14 22:44:19.577761
+78	rsa_graffiti	2013-11-14 22:44:19.579505	2013-11-14 22:44:19.579505
+79	daily_photoart	2013-11-14 22:44:19.58149	2013-11-14 22:44:19.58149
+80	mafia_streetlove	2013-11-14 22:44:19.583876	2013-11-14 22:44:19.583876
+81	graffbex	2013-11-14 22:44:19.58594	2013-11-14 22:44:19.58594
+82	ig_urbanhub	2013-11-14 22:44:19.587942	2013-11-14 22:44:19.587942
+83	urbanromantix	2013-11-14 22:44:19.589627	2013-11-14 22:44:19.589627
+84	infamous_family	2013-11-14 22:44:19.591227	2013-11-14 22:44:19.591227
+85	igersoftheday_	2013-11-14 22:44:19.592874	2013-11-14 22:44:19.592874
+86	stickers	2013-11-14 22:44:19.594651	2013-11-14 22:44:19.594651
+87	thispixelnation	2013-11-14 22:44:19.609727	2013-11-14 22:44:19.609727
+88	royalsnappingartists	2013-11-14 22:44:19.611917	2013-11-14 22:44:19.611917
+89	cityliving	2013-11-14 22:44:19.613776	2013-11-14 22:44:19.613776
+90	streetart	2013-11-14 22:44:19.615443	2013-11-14 22:44:19.615443
+91	igersmelbourne	2013-11-14 22:44:19.617461	2013-11-14 22:44:19.617461
+92	slaps	2013-11-14 22:44:19.619337	2013-11-14 22:44:19.619337
+93	ig_4every1	2013-11-14 22:44:19.621008	2013-11-14 22:44:19.621008
+94	urbanexplorer	2013-11-14 22:44:19.622841	2013-11-14 22:44:19.622841
+95	melbourne	2013-11-14 22:44:19.624956	2013-11-14 22:44:19.624956
+96	suburbs	2013-11-14 22:44:19.627109	2013-11-14 22:44:19.627109
+97	melbournestreetart	2013-11-14 22:44:19.629072	2013-11-14 22:44:19.629072
+98	streetartmelbourne	2013-11-14 22:44:19.630921	2013-11-14 22:44:19.630921
+99	igdaily	2013-11-14 22:44:19.632615	2013-11-14 22:44:19.632615
+100	icu_aussies	2013-11-14 22:44:19.634239	2013-11-14 22:44:19.634239
+101	webstagram	2013-11-14 22:44:19.635878	2013-11-14 22:44:19.635878
+102	picture_to_keep	2013-11-14 22:44:19.637612	2013-11-14 22:44:19.637612
+103	new york	2013-11-14 22:57:30.17635	2013-11-14 22:57:30.17635
+104	hi	2013-11-14 23:02:34.886289	2013-11-14 23:02:34.886289
+105	sprayporn	2013-11-14 23:08:23.325536	2013-11-14 23:08:23.325536
+106	art	2013-11-14 23:08:23.388265	2013-11-14 23:08:23.388265
+107	marvel	2013-11-14 23:08:23.393873	2013-11-14 23:08:23.393873
+108	instagraffiti	2013-11-14 23:08:23.397572	2013-11-14 23:08:23.397572
+109	streetarteverywhere	2013-11-14 23:08:23.400728	2013-11-14 23:08:23.400728
+110	graff	2013-11-14 23:08:23.404054	2013-11-14 23:08:23.404054
+111	streetartphotography	2013-11-14 23:08:23.407943	2013-11-14 23:08:23.407943
+112	spray	2013-11-14 23:08:23.411484	2013-11-14 23:08:23.411484
+113	graffitiporn	2013-11-14 23:08:23.427535	2013-11-14 23:08:23.427535
+114	graffiti	2013-11-14 23:08:23.432348	2013-11-14 23:08:23.432348
+115	instagraffite	2013-11-14 23:08:23.436619	2013-11-14 23:08:23.436619
+116	spraycan	2013-11-14 23:08:23.441969	2013-11-14 23:08:23.441969
+117	urbanart	2013-11-14 23:08:23.447286	2013-11-14 23:08:23.447286
+118	sprayart	2013-11-14 23:08:23.451543	2013-11-14 23:08:23.451543
+119	igerstoulouse	2013-11-14 23:08:23.454651	2013-11-14 23:08:23.454651
+120	spiderman	2013-11-14 23:08:23.457968	2013-11-14 23:08:23.457968
+121	wallart	2013-11-14 23:08:23.46097	2013-11-14 23:08:23.46097
+122	instacolors	2013-11-14 23:08:23.464044	2013-11-14 23:08:23.464044
+123	urbex	2013-11-14 23:08:23.468322	2013-11-14 23:08:23.468322
+124	graffitiart	2013-11-14 23:08:23.473775	2013-11-14 23:08:23.473775
+125	spraypaint	2013-11-14 23:08:23.477416	2013-11-14 23:08:23.477416
+126	graffitiwall	2013-11-14 23:08:23.481075	2013-11-14 23:08:23.481075
+127	artporn	2013-11-14 23:08:23.484622	2013-11-14 23:08:23.484622
+128	obey	2013-11-14 23:08:23.636042	2013-11-14 23:08:23.636042
+129	shepardfairey	2013-11-14 23:08:23.639482	2013-11-14 23:08:23.639482
+130	ig_barcelona	2013-11-14 23:08:23.669449	2013-11-14 23:08:23.669449
+131	rsa_graffiti_eyes	2013-11-14 23:08:23.673274	2013-11-14 23:08:23.673274
+132	wynwoodwalls	2013-11-14 23:08:23.677138	2013-11-14 23:08:23.677138
+133	urbanartworld	2013-11-14 23:08:23.680756	2013-11-14 23:08:23.680756
+134	jj_streetarts	2013-11-14 23:08:23.684196	2013-11-14 23:08:23.684196
+135	eyesofthecity	2013-11-14 23:08:23.687252	2013-11-14 23:08:23.687252
+136	maracas	2013-11-14 23:08:23.690188	2013-11-14 23:08:23.690188
+137	wallfilth	2013-11-14 23:08:23.694361	2013-11-14 23:08:23.694361
+138	jj_daily	2013-11-14 23:08:23.710332	2013-11-14 23:08:23.710332
+139	miami	2013-11-14 23:08:23.71472	2013-11-14 23:08:23.71472
+140	iphoneonly	2013-11-14 23:08:23.718027	2013-11-14 23:08:23.718027
+141	jj_onthewall	2013-11-14 23:08:23.721225	2013-11-14 23:08:23.721225
+142	jj_wallshots	2013-11-14 23:08:23.725602	2013-11-14 23:08:23.725602
+143	snapseed	2013-11-14 23:08:23.729246	2013-11-14 23:08:23.729246
+144	ig_europe	2013-11-14 23:08:23.733081	2013-11-14 23:08:23.733081
+\.
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: apprentice
+--
+
+SELECT pg_catalog.setval('tags_id_seq', 144, true);
+
+
+--
+-- Name: instagram_images_pkey; Type: CONSTRAINT; Schema: public; Owner: apprentice; Tablespace: 
+--
+
+ALTER TABLE ONLY instagram_images
+    ADD CONSTRAINT instagram_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: instagram_images_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: apprentice; Tablespace: 
+--
+
+ALTER TABLE ONLY instagram_images_tags
+    ADD CONSTRAINT instagram_images_tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: apprentice; Tablespace: 
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: apprentice; Tablespace: 
+--
+
+CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: apprentice
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM apprentice;
+GRANT ALL ON SCHEMA public TO apprentice;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

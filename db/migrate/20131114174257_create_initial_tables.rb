@@ -2,15 +2,15 @@ class CreateInitialTables < ActiveRecord::Migration
   def change
     create_table :instagram_images do |t|
       t.string :link
-      t.integer :latitude
-      t.integer :longitude
+      t.string :latitude
+      t.string :longitude
       t.integer :likes
       t.string :created
-      t.string :thumsbnail
+      t.string :thumbnail
 
       t.timestamps
     end
-  
+
     create_table :tags do |t|
       t.string :label
 

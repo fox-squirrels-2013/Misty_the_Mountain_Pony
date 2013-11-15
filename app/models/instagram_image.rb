@@ -1,10 +1,12 @@
 class InstagramImage < ActiveRecord::Base
-  validates :link, uniqueness: true 
   has_and_belongs_to_many :tags
+
+  validates :link, uniqueness: true
 
   def location
     [longitude, latitude]
   end
+
 end
 
 
