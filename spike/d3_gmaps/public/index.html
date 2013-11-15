@@ -129,7 +129,7 @@ d3.json("instagram.json", function(data) {
       // Add a circle.
       marker.append("svg:circle")
           .attr("r", 4.5)
-          .attr('fill', 'orange')
+          .attr('fill', 'blue')
           .attr("cx", padding)
           .attr("cy", padding);
 
@@ -139,6 +139,12 @@ d3.json("instagram.json", function(data) {
           .attr("y", padding)
           .attr("dy", ".34em")
           .text(function(d) { return d.key; });
+
+      // Add a thumbnail (https://groups.google.com/forum/#!topic/d3-js/aQSWnEDFxIc)
+      marker.append("svg:image")
+          .attr("xlink:href", "http://distilleryimage11.s3.amazonaws.com/3a80d5184d8411e38f7312f452da4cc0_5.jpg")
+          .attr("width", 100)
+          .attr("height", 100);
 
       function transform(d) {
         d = new google.maps.LatLng(J.lat(d), J.long(d));
