@@ -6,11 +6,11 @@ class CreateInitialTables < ActiveRecord::Migration
       t.integer :longitude
       t.integer :likes
       t.string :created
-      t.string :thumsbnail
+      t.string :thumbnail
 
       t.timestamps
     end
-  
+
     create_table :tags do |t|
       t.string :label
 

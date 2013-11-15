@@ -1,11 +1,3 @@
-require 'awesome_print'
-require "sinatra"
-require "instagram"
-
-enable :sessions
-
-CALLBACK_URL = "http://localhost:9393/oauth/callback"
-
 get "/" do
   '<a href="/oauth/connect">Connect with Instagram</a>'
 end
@@ -30,7 +22,7 @@ get "/feed/:tag" do
 
   grs = graffitis.reject{|g| g[:location].nil? }
 
-  ap grs
+  # ap grs
 
   grs.map! do |g|
     args = {}
@@ -40,8 +32,8 @@ get "/feed/:tag" do
     args[:link]         = g[:link]
     args[:created]      = g[:created_time]
     args[:thumbnail]    = g[:images][:thumbnail][:url]
-    args[:tags]         = g[:tags]
-    InstagramImage.new(args)
+    # args[:tags]         = g[:tags]
+    InstagramImage.create(args)
   end
 
   ap grs
@@ -69,29 +61,29 @@ get "/feed/:tag" do
 end
 
 
-class InstagramImage
-  def initialize(args)
-    @link = args[:link] || ''
-    @location = args[:location] || []
-    @likes = args[:likes] || 0
-    @created = args[:created] || ''
-    @thumbnail = args[:thumbnail] || ''
-    # @tags = args[:tags] || []
-    p @name
-  end
+# class InstagramImage
+#   def initialize(args)
+#     @link = args[:link] || ''
+#     @location = args[:location] || []
+#     @likes = args[:likes] || 0
+#     @created = args[:created] || ''
+#     @thumbnail = args[:thumbnail] || ''
+#     # @tags = args[:tags] || []
+#     p @name
+#   end
 
 
   # http://jsonlint.com/
-  def to_json
-    json  = "\"#{@link.split('/').last}\":"
-    json += "[ "
-    json += " \"link\": \"#{@link}\", "
-    json += " \"location\": \"#{@location}\","
-    json += " \"likes\": \"#{@likes}\","
-    json += " \"created\": \"#{@created}\","
-    json += " \"thumbnail\": \"#{@thumbnail}\""
-    # json += " \"tags\": \"#{@tags.gsub(/\"/, '\'')}\""
-    json += "] "
-    json
-  end
-end
+#   def to_json
+#     json  = "\"#{@link.split('/').last}\":"
+#     json += "[ "
+#     json += " \"link\": \"#{@link}\", "
+#     json += " \"location\": \"#{@location}\","
+#     json += " \"likes\": \"#{@likes}\","
+#     json += " \"created\": \"#{@created}\","
+#     json += " \"thumbnail\": \"#{@thumbnail}\""
+#     # json += " \"tags\": \"#{@tags.gsub(/\"/, '\'')}\""
+#     json += "] "
+#     json
+#   end
+# end
