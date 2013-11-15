@@ -131,6 +131,11 @@ namespace :db do
   task :dump do
     `pg_dump #{DB_NAME} > data_dump`
   end
+
+  desc "load the db dump"
+  task :load do
+    `rake db:drop; rake db:create && psql #{DB_NAME} < data_dump`
+  end
 end
 
 desc 'Start IRB with application environment loaded'

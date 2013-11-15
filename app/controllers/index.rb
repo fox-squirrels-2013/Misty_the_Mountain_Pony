@@ -1,5 +1,5 @@
 get "/" do
-  File.read(File.open('public/index.html'))
+  File.read(File.join('public', 'index.html'))
   # '<a href="/oauth/connect">Connect with Instagram</a>'
 end
 
