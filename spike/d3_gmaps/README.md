@@ -5,4 +5,4 @@ Added stub instagram data
 
 run with:
 
-`ruby app.rb` or `shotgun app.rb`
+`ruby app.rb`
