@@ -1,77 +1,78 @@
 get "/" do
-  '<a href="/oauth/connect">Connect with Instagram</a>'
+  File.read(File.open('public/index.html'))
+  # '<a href="/oauth/connect">Connect with Instagram</a>'
 end
 
-get "/oauth/connect" do
-  redirect Instagram.authorize_url(:redirect_uri => CALLBACK_URL)
-end
+# get "/oauth/connect" do
+#   redirect Instagram.authorize_url(:redirect_uri => CALLBACK_URL)
+# end
 
-get "/oauth/callback" do
-  p params
-  response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK_URL)
-  session[:access_token] = response.access_token
-  redirect "/feed"
-end
+# get "/oauth/callback" do
+#   p params
+#   response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK_URL)
+#   session[:access_token] = response.access_token
+#   redirect "/feed"
+# end
 
-get "/feed/:tag" do
+get "/feed" do
   # client = Instagram.client(:access_token => session[:access_token])
 
   # user = client.user
 
   # ap Instagram.user_search("ml3vi")
-  graffitis = Instagram.tag_recent_media("#{params[:tag]}")
+#   graffitis = Instagram.tag_recent_media("#{params[:tag]}")
 
-  grs = graffitis.reject{|g| g[:location].nil? }
+#   grs = graffitis.reject{|g| g[:location].nil? }
 
-  # ap grs
+#   # ap grs
 
-  grs.map! do |g|
-    args = {}
-    args[:latitude]     = g[:location][:latitude]
-    args[:longitude]    = g[:location][:longitude]
-    args[:likes]        = g[:likes][:count]
-    args[:link]         = g[:link]
-    args[:created]      = g[:created_time]
-    args[:thumbnail]    = g[:images][:thumbnail][:url]
-    args[:tags]         = g[:tags].map{|t| Tag.where(label: t).first_or_create} #sort_tags_out(g[:tags])
+#   grs.map! do |g|
+#     args = {}
+#     args[:latitude]     = g[:location][:latitude]
+#     args[:longitude]    = g[:location][:longitude]
+#     args[:likes]        = g[:likes][:count]
+#     args[:link]         = g[:link]
+#     args[:created]      = g[:created_time]
+#     args[:thumbnail]    = g[:images][:thumbnail][:url]
+#     args[:tags]         = g[:tags].map{|t| Tag.where(label: t).first_or_create} #sort_tags_out(g[:tags])
 
-    image = InstagramImage.create(args)
-    p image.tags
-    image
-  end
+#     image = InstagramImage.create(args)
+#     p image.tags
+#     image
+#   end
 
-  ap grs
+#   ap grs
 
-  # def sort_tags_out(tag_array)
-  #   # Check if a tag already exists in database
-  #   tag_array.map { |t|
-  #   Tag.find_by_label(t) if return
+#   # def sort_tags_out(tag_array)
+#   #   # Check if a tag already exists in database
+#   #   tag_array.map { |t|
+#   #   Tag.find_by_label(t) if return
 
-  #   }
-
-
-  #   .map{|t| Tag.create(label: t)}
-  # end
-# img.location.latitude
-# img.location.longitude
-# img.likes.count
-# img.link
-# img.created_time
-# img.images.thumbnail.url
-# img.tags
-
-  # latlongArray = grs.map do |g|
-  #   lat = g[:location][:latitude]
-  #   lon = g[:location][:longitude]
-  #   "'name' : [#{lat}, #{lon} ]"
-  # end
-
-  # out = "{" + latlongArray.join(',') + "}"
-  # ap out
+#   #   }
 
 
-  '{' + grs.map(&:to_json).join(',')  +'}'
+#   #   .map{|t| Tag.create(label: t)}
+#   # end
+# # img.location.latitude
+# # img.location.longitude
+# # img.likes.count
+# # img.link
+# # img.created_time
+# # img.images.thumbnail.url
+# # img.tags
 
+#   # latlongArray = grs.map do |g|
+#   #   lat = g[:location][:latitude]
+#   #   lon = g[:location][:longitude]
+#   #   "'name' : [#{lat}, #{lon} ]"
+#   # end
+
+#   # out = "{" + latlongArray.join(',') + "}"
+#   # ap out
+
+
+#   '{' + grs.map(&:to_json).join(',')  +'}'
+  InstagramImage.all.to_json
 end
 
 
