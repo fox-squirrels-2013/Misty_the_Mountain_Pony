@@ -110,7 +110,7 @@ d3.json("instagram.json", function(data) {
 
   // Add the container when the overlay is added to the map.
   overlay.onAdd = function() {
-    var layer = d3.select(this.getPanes().overlayLayer).append("div")
+    var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
         .attr("class", "stations");
 
     // Draw each marker as a separate SVG element.
@@ -141,10 +141,31 @@ d3.json("instagram.json", function(data) {
           .text(function(d) { return d.key; });
 
       // Add a thumbnail (https://groups.google.com/forum/#!topic/d3-js/aQSWnEDFxIc)
-      marker.append("svg:image")
-          .attr("xlink:href", "http://distilleryimage11.s3.amazonaws.com/3a80d5184d8411e38f7312f452da4cc0_5.jpg")
-          .attr("width", 100)
-          .attr("height", 100);
+      // marker.append("svg:image")
+      //     .attr("xlink:href", "http://distilleryimage11.s3.amazonaws.com/3a80d5184d8411e38f7312f452da4cc0_5.jpg")
+      //     .attr("width", 100)
+      //     .attr("height", 100);
+
+      // Add an event listener to the svg marker; methods like d3.mouse, d3.touches, d3.event, selection.on()
+      // marker.on("click", console.log("hello little mouse"));
+      // http://christopheviau.com/d3_tutorial/
+      // https://groups.google.com/forum/#!topic/d3-js/kEqID1q3-2A
+// I ended up sensing mouse move on map and calculating the mouse inside condition myself inside a separate function (mouseMove) using lat lng of mouse!
+
+// var m = this;
+// google.maps.event.addListener(m.map, 'mousemove', function(e) { m.mouseMove(e.latLng);});
+
+
+
+      marker.append("svg:circle")
+          .attr("r", 10)
+          .attr('fill', 'purple')
+          .attr("cx", padding)
+          .attr("cy", padding)
+          .on("mousedown", function() { d3.select(this).style("fill", "aliceblue"); })
+          .on("mouseup", function() { d3.select(this).style("fill", null);
+          });
+
 
       function transform(d) {
         d = new google.maps.LatLng(J.lat(d), J.long(d));
