@@ -25,14 +25,13 @@ get "/oauth/callback" do
   redirect "/feed"
 end
 
-get "/feed" do
+get "/feed/:tag" do
   client = Instagram.client(:access_token => session[:access_token])
-  # p client
+
   user = client.user
-  # p user
-  # sleep(3)
+
   # ap Instagram.user_search("ml3vi")
-  graffitis = Instagram.tag_recent_media("sfx_graffiti")
+  graffitis = Instagram.tag_recent_media("#{params[:tag]}")
 
   grs = graffitis.reject{|g| g[:location].nil? }
 
@@ -40,13 +39,14 @@ get "/feed" do
 
   grs.map! do |g|
     args = {}
-    args[:location]     = [ g[:location][:latitude], g[:location][:longitude] ]
+    args[:latitude]     = g[:location][:latitude]
+    args[:longitude]    = g[:location][:longitude]
     args[:likes]        = g[:likes][:count]
     args[:link]         = g[:link]
     args[:created]      = g[:created_time]
     args[:thumbnail]    = g[:images][:thumbnail][:url]
     args[:tags]         = g[:tags]#.map {|t| Tag.create(t)}
-    InstagramImage.new(args)
+    InstagramImage.create(args)
   end
 
   ap grs
@@ -89,14 +89,14 @@ class InstagramImage
   # http://jsonlint.com/
   def to_json
     json  = "\"#{@link.split('/').last}\":"
-    json += "{ "
+    json += "[ "
     json += " \"link\": \"#{@link}\", "
     json += " \"location\": \"#{@location}\","
     json += " \"likes\": \"#{@likes}\","
     json += " \"created\": \"#{@created}\","
     json += " \"thumbnail\": \"#{@thumbnail}\""
     # json += " \"tags\": \"#{@tags.gsub(/\"/, '\'')}\""
-    json += "} "
+    json += "] "
     json
   end
 end
